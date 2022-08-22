@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block head %}
+   <title>CRUD</title>
+{% endblock %}
+
+{% block body %}
+<fieldset>
+ <form method="POST" action="/add">
+    <div>
+      <label>User Id</label>
+      <input type="text" name="new_usr_id" id="new_usr_id" required="required"> <br><br>
+      <label>User Name</label>
+      <input type="text" name="new_usr_name" id="new_usr_name" required="required"> <br><br>
+      <label>User Age</label>
+      <input type="number" name="new_usr_age" id="new_usr_age" required="required"> <br><br>
+      <label">User Email</label>
+      <input type="email" name="new_usr_email" id="new_usr_email" required="required"> <br><br>
+   </div>
+   <div>
+      <input type="radio" name="new_usr_gender" id="new_usr_gender" value="male">
+      <label>Male</label>
+      <input type="radio" name="new_usr_gender" id="new_usr_gender" value="female">
+      <label>Female</label>
+      <input type="radio" name="new_usr_gender" id="new_usr_gender" value="others">
+      <label>Others</label>
+      </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+ </form>
+ </fieldset>
+{% endblock %}

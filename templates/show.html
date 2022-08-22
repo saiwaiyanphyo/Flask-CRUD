@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block head %}
+   <title>CRUD</title>
+{% endblock %}
+
+{% block body %}
+
+<table class="table">
+   <tr>
+      <th>Id</th>
+      <th>Name</th>
+      <th>Age</th>
+      <th>Email</th>
+      <th>Gender</th>
+   </tr>
+   <!-- here is a for-loop to give us all the users -->
+   {% for fri in show_friend %}
+   <tr>
+      <td>{{ fri.user_id }}</td>
+      <td>{{ fri.user_name }}</td>
+      <td>{{ fri.age }}</td>
+      <td>{{ fri.email }}</td>
+      <td>{{ fri.gender }}</td>
+   </tr>
+   {% endfor %}
+</table>
+ 
+{% endblock %}
