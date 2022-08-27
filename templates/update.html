@@ -5,5 +5,27 @@
 {% endblock %}
 
 {% block body %}
-   <h1>Hello! This is update.html</h1>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+   <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <a class="nav-link" href="/add">Add</a>
+      </li>
+      <li class="nav-item">
+         <a class="nav-link" href="/show">Show</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+   <form action='/update/{{update_user.id}}' method = "POST">
+      <label>Add New Name</label>
+      <input type="text" name="name" value="{{update_user.name}}"><br><br>
+      <label>Add User Age</label>
+      <input type="number" name="age" value="{{update_user.age}}"><br><br>
+      <label">Add User Email</label>
+      <input type="email" name="email" value="{{update_user.email}}"><br><br>
+      <input type="submit" value="Update">
+    </form>
 {% endblock %}

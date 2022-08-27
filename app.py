@@ -1,70 +1,86 @@
+from cmath import exp
 from crypt import methods
 import email
 from email import message
 from logging import exception
 from urllib import request
 from flask import Flask, render_template, url_for, request, redirect
-from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy.sql import text
+from models import db, UserModel
+# from flask_sqlalchemy import SQLAlchemy
+# from sqlalchemy import text
+import logging
+
+logging.basicConfig(level=logging.DEBUG)
 
 app  = Flask(__name__)
 
-db_name = 'test'
 
+db_name = 'test'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:asdf1234@localhost/' + db_name
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 
-db = SQLAlchemy(app)
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.db'
+# app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+db.init_app(app)
 
-#database connection 
-class friends(db.Model):
-    __tablename__ = 'user'
-    user_id = db.Column(db.String, primary_key=True)
-    user_name = db.Column(db.String)
-    age = db.Column(db.Integer)
-    email = db.Column(db.String)
-    gender = db.Column(db.String)
-
-    def __init__(self, user_id, user_name, age, email,gender):
-        self.id = user_id
-        self.name = user_name
-        self.age = age
-        self.email = email
-        self.gender = gender
+@app.before_first_request
+def create_table():
+    db.create_all()
 
 #route
 @app.route('/add', methods=['GET', 'POST'])
 def add():
+    if request.method == 'GET':
+        return render_template('add.html')
     if request.method == 'POST':
-        add_usr_id = request.form['new_usr_id']
-        add_usr_name = request.form['new_usr_name']
-        add_usr_age = request.form['new_usr_age']
-        add_usr_email = request.form['new_usr_email']
-        add_usr_gender = request.form['new_usr_gender']
-        commit_user = friends(add_usr_id, add_usr_name, add_usr_age, add_usr_email, add_usr_gender)
-        db.session.add(commit_user)
+        logging.info(request)
+        name = request.form['new_usr_name']
+        age = request.form['new_usr_age']
+        email = request.form['new_usr_email']
+        gender = request.form['new_usr_gender']
+        adding_user = UserModel(name, age, email, gender)
+        db.session.add(adding_user)
         db.session.commit()
-        message = "The record for {add_usr_name} was added."
+        message = "The record was added."
         return render_template('add.html', message=message)
     else:
         return render_template('add.html')
 
 @app.route('/show')
 def read():
-    show_friend = friends.query.all()
+    show_friend = UserModel.query.all()
     return render_template('show.html', show_friend = show_friend)
 
-@app.route('/update')
-def update():
-    return render_template('update.html')
+@app.route('/update/<int:id>', methods=['Get','POST'])
+def update(id):
+    update_user = UserModel.query.get_or_404(id)
 
-@app.route('/delete')
-def delete():
-    return render_template('delete.html')
+    if request.method == 'POST':
+        update_user.name = request.form['name']
+        update_user.age = request.form['age']
+        update_user.email = request.form['email']
+        try:
+            db.session.commit()
+            return redirect('/show')
+        except:
+            return ('There was an error in updating')
+    else:
+        return render_template('update.html', update_user = update_user)
+
+@app.route('/delete/<int:id>')
+def delete(id):
+    delete_user = UserModel.query.get_or_404(id)
+    
+    try:
+        db.session.delete(delete_user)
+        db.session.commit()
+        return redirect('/show')
+    except:
+        return 'There is a problem in deleting'
 
 @app.route('/')
 def index():
-        return ('This is index')
+        return render_template('index.html')
    
 
 if __name__ == '__main__':

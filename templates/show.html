@@ -1,29 +1,42 @@
-{% extends 'base.html' %}
-
-{% block head %}
-   <title>CRUD</title>
-{% endblock %}
-
-{% block body %}
-
+{% extends 'base.html' %} {% block head %}
+<title>CRUD</title>
+{% endblock %} {% block body %}
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <span class="navbar-toggler-icon"></span>
+ </button>
+ <div class="collapse navbar-collapse" id="navbarNav">
+   <ul class="navbar-nav">
+     <li class="nav-item">
+       <a class="nav-link" href="/add">Add</a>
+     </li>
+     <li class="nav-item">
+        <a class="nav-link" href="/show">Show</a>
+     </li>
+   </ul>
+ </div>
+</nav>
 <table class="table">
-   <tr>
-      <th>Id</th>
-      <th>Name</th>
-      <th>Age</th>
-      <th>Email</th>
-      <th>Gender</th>
-   </tr>
-   <!-- here is a for-loop to give us all the users -->
-   {% for fri in show_friend %}
-   <tr>
-      <td>{{ fri.user_id }}</td>
-      <td>{{ fri.user_name }}</td>
-      <td>{{ fri.age }}</td>
-      <td>{{ fri.email }}</td>
-      <td>{{ fri.gender }}</td>
-   </tr>
-   {% endfor %}
+  <tr>
+    <th>Id</th>
+    <th>Name</th>
+    <th>Age</th>
+    <th>Email</th>
+    <th>Gender</th>
+    <th></th>
+    <th></th>
+  </tr>
+  <!-- here is a for-loop to give us all the users -->
+  {% for fri in show_friend %}
+  <tr>
+    <td>{{ fri.id }}</td>
+    <td>{{ fri.name }}</td>
+    <td>{{ fri.age }}</td>
+    <td>{{ fri.email }}</td>
+    <td>{{ fri.gender }}</td>
+    <td><a href="/delete/{{fri.id}}">Delete</a></td>
+    <td><a href="/update/{{fri.id}}">Update</a></td>
+  </tr>
+  {% endfor %}
 </table>
- 
+
 {% endblock %}
